@@ -283,6 +283,8 @@ class MyPlugin(Star):
 
                 # 检查当前日期是否为工作日
                 is_workday = calendar.is_workday(now.date())
+                if is_workday:
+                    logger.info(f"当前日期 {now.date()} 是工作日，继续执行定时任务。")
                 if not is_workday:
                     logger.info(f"当前日期 {now.date()} 不是工作日，等待到下一天午夜继续检查。")
                     # 如果不是工作日，计算到下一天午夜的时间差
