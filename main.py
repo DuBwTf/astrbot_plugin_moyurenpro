@@ -153,27 +153,27 @@ class MyPlugin(Star):
         except Exception as e:
             logger.error(f"保存配置文件时出错: {e}")
 
-    async def terminate(self):
+    #async def terminate(self):
         """
         关闭定时任务并清理缓存
         """
         # 禁用定时任务
-        self.enabled = False
-        self.config["enabled"] = self.enabled
-        self.save_config()  # 保存配置文件
-        logger.info(f"定时任务启用状态已更新为: {self.enabled}")
-        try:
-            self.save_schedule()
-            logger.info("定时任务配置已保存")
-        except Exception as e:
-            logger.error(f"保存定时任务配置时出错: {e}")
+        #self.enabled = False
+        #self.config["enabled"] = self.enabled
+        #self.save_config()  # 保存配置文件
+        #logger.info(f"定时任务启用状态已更新为: {self.enabled}")
+        #try:
+        #    self.save_schedule()
+        #    logger.info("定时任务配置已保存")
+        #except Exception as e:
+        #    logger.error(f"保存定时任务配置时出错: {e}")
         # 清理临时目录
-        import shutil
-        if os.path.exists(self.temp_dir):
-            shutil.rmtree(self.temp_dir)
-            logger.info("临时目录已清理")
-        else:
-            logger.info("临时目录不存在，无需清理")
+        #import shutil
+        #if os.path.exists(self.temp_dir):
+        #    shutil.rmtree(self.temp_dir)
+        #    logger.info("临时目录已清理")
+        #else:
+        #    logger.info("临时目录不存在，无需清理")
 
     @filter.command("timed_tasks")
     async def toggle(self, event: AstrMessageEvent):
