@@ -153,7 +153,7 @@ class MyPlugin(Star):
         except Exception as e:
             logger.error(f"保存配置文件时出错: {e}")
 
-    #async def terminate(self):
+    async def terminate(self):
         """
         关闭定时任务并清理缓存
         """
@@ -259,6 +259,10 @@ class MyPlugin(Star):
         return target_time
 
     async def scheduled_task(self):
+        if not self.enabled:
+            logger.info("定时任务未启用，跳过执行。")
+            return
+        logger.info(f"定时任务开始执行，任务时间: {self.user_custom_time}")
         self.next_target_time = None
         # 初始化计数器
         check_count = 0
@@ -282,10 +286,6 @@ class MyPlugin(Star):
                 now = datetime.datetime.now(self.user_custom_timezone)
                 logger.info(f"获取当前时间: {now}")
 
-                # 检查是否到零点，若是则重置标志位
-                if now.hour == 0 and now.minute == 0:
-                    task_executed = False
-                    logger.info("已到零点，重置任务执行标志")
 
                 # 检查当前日期是否为工作日
                 is_workday = calendar.is_workday(now.date())
@@ -338,10 +338,12 @@ class MyPlugin(Star):
                     now = datetime.datetime.now(self.user_custom_timezone)
                     if now >= self.next_target_time:
                         logger.info("已到达目标时间，准备执行任务")
+                        # 重置 task_executed 标志位
+                        task_executed = False
                     else:
                         logger.info(f"还未到达目标时间，当前时间: {now}, 目标时间: {self.next_target_time}")
 
-                # 检查任务是否已经执行
+                
                 if not task_executed:
                     # 获取摸鱼图片的本地路径
                     image_path = await self.get_moyu_image()
@@ -409,4 +411,5 @@ class MyPlugin(Star):
                 if error_retry_count == max_retry_count:
                     logger.error("达到最大重试次数，暂停任务，等待设置更新。")
          
+
 
