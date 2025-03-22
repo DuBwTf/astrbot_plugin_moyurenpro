@@ -334,10 +334,13 @@ class MyPlugin(Star):
                 if time_until_target <= 100 and self.enabled:
                     logger.info(f"等待 {time_until_target} 秒")
                     await asyncio.sleep(time_until_target)
+                    # 等待结束后，再次检查是否到了执行任务的时间
+                    now = datetime.datetime.now(self.user_custom_timezone)
                     # 添加工作日验证
                     is_workday = calendar.is_workday(now.date())
-                    if now >= self.next_target_time:
-                        logger.info("已到达目标时间，准备执行任务")
+                    if is_workday:
+                        if now >= self.next_target_time:
+                            logger.info("已到达目标时间，准备执行任务")
                         # 重置 task_executed 标志位
                         task_executed = False
                     else:
