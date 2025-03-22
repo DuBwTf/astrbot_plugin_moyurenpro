@@ -330,18 +330,18 @@ class MyPlugin(Star):
                     # 重新计算剩余时间
                     time_until_target = (self.next_target_time - now).total_seconds()
 
-                # 当剩余时间小于等于 60 秒时，等待剩余时间
-                if time_until_target <= 80 and self.enabled:
+                # 当剩余时间小于等于 100 秒时，等待剩余时间
+                if time_until_target <= 100 and self.enabled:
                     logger.info(f"等待 {time_until_target} 秒")
                     await asyncio.sleep(time_until_target)
-                    # 等待结束后，再次检查是否到了执行任务的时间
-                    now = datetime.datetime.now(self.user_custom_timezone)
+                    # 添加工作日验证
+                    is_workday = calendar.is_workday(now.date())
                     if now >= self.next_target_time:
                         logger.info("已到达目标时间，准备执行任务")
                         # 重置 task_executed 标志位
                         task_executed = False
                     else:
-                        logger.info(f"还未到达目标时间，当前时间: {now}, 目标时间: {self.next_target_time}")
+                        logger.info(f"当前日期 {now.date()} 不是工作日，跳过本次任务执行。")
 
                 
                 if not task_executed:
@@ -411,5 +411,6 @@ class MyPlugin(Star):
                 if error_retry_count == max_retry_count:
                     logger.error("达到最大重试次数，暂停任务，等待设置更新。")
          
+
 
 
