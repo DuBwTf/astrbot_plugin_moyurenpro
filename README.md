@@ -9,7 +9,7 @@
 
 支持自定义时间、时区，自定义api，支持立即发送，工作日定时发送。
 
-需安装第三方库[chinese_calendar](https://github.com/LKI/chinese-calendar)
+需安装第三方库[chinese_calendar](https://github.com/LKI/chinese-calendar)，已配置requirements.txt文件自动安装，异常可手动安装
 ```
 docker exec -it astrbot /bin/bash #docker部署进入astrbot容器，运行bash进行安装
 
